@@ -1,0 +1,51 @@
+# library(DiagrammeR)
+# grViz("
+#
+digraph test {
+
+  subgraph main {
+    node [shape=box];
+    dbsearch [ label = "  Records identified through  \n    various database searching  \n(n = 6,111)"]
+    othersearch [ label = "   Additional records identified through   \n   handsearching and citation tracking   \n(n = 4935)"]
+    {rank = same; dbsearch; othersearch}
+  }
+
+  subgraph c1 {
+    node [shape=box];
+    dummy00[ shape = point, width = 0 ]
+    total [ label = " Total records identified \n(n = 11046)"]
+    dummy0[ shape = point, width = 0 ]
+    screen [ label = " Records screened \n(n = 8419)"]
+    dummy1[ shape = point, width = 0 ]
+    review [ label = " Full-text articles \n assessed for eligibility \n(n = 247)"]
+    dummy2[ shape = point, width = 0 ]
+    include [ label = " Citations included in review \n(n = 29)"];
+    edge[weight=2];
+    total -> dummy0  [arrowhead = none ];
+    dummy0 -> screen;
+    screen -> dummy1 [ arrowhead = none ];
+    dummy1 -> review;
+    review -> dummy2 [ arrowhead = none ];
+    dummy2 -> include;
+   }
+
+  subgraph c1_extra {
+    node[shape=box];
+    dup_remove [ label = " Duplicates removed \n (n = 2627)"]
+    screen_exclude [ label = " Records excluded (n = 8172): \n   ASReview machine learning algorithm (n = 5864)   \n    Manual screening (n = 2308)   "];
+    review_exclude [ label = " Full-text articles excluded \n (n = 218)"];
+  }
+
+  othersearch -> dbsearch [ arrowhead = none ];
+  dbsearch -> total;
+
+  dummy0 -> dup_remove;
+  dummy1 -> screen_exclude;
+  dummy2 -> review_exclude;
+
+  {rank = same; dup_remove; dummy0}
+  {rank = same; screen_exclude; dummy1}
+  {rank = same; review_exclude; dummy2}
+
+}
+# ")
