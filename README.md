@@ -2,7 +2,7 @@
 
 Authors: Qiyang Zhang, Jun Wang, Amanda Neitzel
 
-Journal: Journal of Youth and Adolescents
+Journal: Journal of Youth and Adolescence
 
 # About #
 This repository shares two R files we used to 1) conduct meta-analysis and 2) create the PRISMA flow diagram.
