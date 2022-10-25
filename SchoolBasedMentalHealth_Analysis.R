@@ -434,16 +434,30 @@ MVfull.coef_s_2
 # Marginal Means
 #################################################################################
 # re-run model for each moderator to get marginal means for each #
-
 # set up table to store results
 means <- data.frame(moderator = character(0), group = character(0), beta = numeric(0), SE = numeric(0), 
                     tstat = numeric(0), df = numeric(0), p_Satt = numeric(0))
 
-mods <- c("as.factor(Longduration)", "as.factor(Universal)","as.factor(Smallsample)","as.factor(Teacher)","as.factor(CBT)", "as.factor(Elementary)")
+# make factor moderators for means
+full$Teacher.f <- as.factor(ifelse(full$Teacher==1, "Teacher", "Not Teacher"))
+full$CBT.f <- as.factor(ifelse(full$CBT==1, "CBT", "Not CBT"))
+full$Universal.f <- as.factor(ifelse(full$Universal==1, "Universal", "Targeted"))
+full$Elementary.f <- as.factor(ifelse(full$Elementary==1, "Elementary", "Secondary"))
+full$Depression.f <- as.factor(ifelse(full$Depression==1, "Depression", "Anxiety"))
+
+full$TeacherXCBT <- as.factor(paste(full$Teacher.f, full$CBT.f, sep = " "))
+full$UniversalXTeacher <- as.factor(paste(full$Universal.f, full$Teacher.f, sep = " "))
+full$TeacherXElem <- as.factor(paste(full$Teacher.f, full$Elementary.f, sep = " "))
+full$DepressionXTeacher <- as.factor(paste(full$Depression.f, full$Teacher.f, sep = " "))
+full$DepressionXCBT <- as.factor(paste(full$Depression.f, full$CBT.f, sep = " "))
+
+mods <- c("as.factor(Longduration)", "as.factor(Smallsample)","Teacher.f", "CBT.f", 
+          "Universal.f", "Elementary.f", "Depression.f", "TeacherXCBT", 
+          "UniversalXTeacher", "TeacherXElem", "DepressionXTeacher", "DepressionXCBT")
 
 for(i in 1:length(mods)){
-  # i <- 1
-  formula <- reformulate(termlabels = c(mods[i], terms, "-1"))   # Worth knowing - if you duplicate terms, it keeps the first one
+  # i <- 8
+  formula <- reformulate(termlabels = c(mods[i], terms, interact, "-1"))   # Worth knowing - if you duplicate terms, it keeps the first one
   mod_means <- rma.mv(yi=Effect.Size, #effect size
                       V = V_list, #variance (tHIS IS WHAt CHANGES FROM HEmodel)
                       mods = formula, #ADD COVS HERE
